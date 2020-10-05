@@ -1,3 +1,7 @@
+WARNING: The code has not finished yet. Only first three steps are working properly at the moment. - 05/10/2020
+
+TODO: Requirements.txt will be added. 
+
 Step 1: Draw a sketch using sketch_input_interface.py
 That will save the sketch in ndjson format to the ndjson_files directory.
 
@@ -8,6 +12,7 @@ Step 3: To give the sketch as the input to the model, we need to convert it to a
 Your input will be saved in npz_files directory.
 
 Step 4: Give your npz file to the model and extract the embedding.npz file.
+--> You can use these as input both for Sketch_RNN and Sketch-transformer models. 
 
 Step 5: Give embeddings to the euclidian.py to extract distance knowledge
 
