@@ -5,6 +5,7 @@ import time
 from rdp import rdp
 import rdp as rdp_lib
 import math
+import datetime
 
 
 """ To record the drawings to the Drive folder.
@@ -17,9 +18,9 @@ drive = GoogleDrive(g_login)
 
 """
 
-drawing = False # true if mouse is pressed
-image = [] #holds the image as the array of strokes
-stroke = [] #each stroke is composed of x and y values of significant points
+drawing = False  # true if mouse is pressed
+image = []       # holds the image as the array of strokes
+stroke = []      # each stroke is composed of x and y values of significant points
 counter = 1
 simple_output = []
 
@@ -28,33 +29,33 @@ simple_output = []
 def interactive_drawing(event,x,y,flags,param):
     global x_start, y_start, drawing, mode, start_time, counter, stroke, image
 
-    if event==cv2.EVENT_LBUTTONDOWN:
-        drawing=True
+    if event == cv2.EVENT_LBUTTONDOWN:
+        drawing = True
         x_start, y_start = x,y
-        start_time = time.time_ns() #takes the time in nanoseconds
+        start_time = time.time_ns()     # takes the time in nanoseconds
         stroke.append([x])
         stroke.append([y])
         if counter == 1:
             stroke.append([0])
         else:
-            stroke.append([counter*5])
+            stroke.append([counter*0.05])
 
-    elif event==cv2.EVENT_MOUSEMOVE:
-        if drawing==True:
+    elif event == cv2.EVENT_MOUSEMOVE:
+        if drawing:
             point1 = (x_start, y_start)
-            point2 = (x,y)
-            cv2.line(canvas,point1,point2,(0,0,0),2)
+            point2 = (x, y)
+            cv2.line(canvas, point1, point2, (0, 0, 0), 2)
             time_elapsed = time.time_ns() - start_time
-            if time_elapsed >= (5*10^7)/2:
-                if (x_start != x) & (y_start != y):
-                    stroke[0].append(x)
-                    stroke[1].append(y)
-                    stroke[2].append(10*counter)
-                    counter += 1
+            start_time = time.time_ns()
+            if time_elapsed >= (5*10^7):
+                stroke[0].append(x)
+                stroke[1].append(y)
+                stroke[2].append(counter*0.05)
+                counter += 1
             x_start, y_start = x, y
 
     elif event == cv2.EVENT_LBUTTONUP:
-        drawing=False
+        drawing = False
         image.append(stroke)
         stroke = []
 
@@ -68,6 +69,15 @@ def simplification():
     Step-4: Simplify all strokes using the Ramer–Douglas–Peucker algorithm with an epsilon value of 2.0.
     """
     global image, simple_output
+
+    # First of all we should check if the sketch is longer than 20 points.
+    sketch_length = 0
+    for m in image:
+        sketch_length += len(m[0])
+
+    if sketch_length < 20:
+        print("WARNING: The sketch is too short to be processed. Simplification function returns None.")
+        return None
 
     # For Step-1 alignment, I'll find the bounding box top-left corner coordinates to align it with the origin.
     minimum_value_x = np.amin(image[0][0])
@@ -209,16 +219,21 @@ def simplification():
     simple_output.append(simplification_output)
 
 
-
 def converter():
     image_string = str(simple_output[0])
 
-    drawing_map = {"drawing": simple_output[0]}
+    time_stamp_ns = time.time()
+    time_stamp = datetime.datetime.fromtimestamp(time_stamp_ns).strftime('%Y-%m-%d %H:%M:%S')
+    print("time is", time_stamp)
+    key_id = str(time_stamp[0:4]) + str(time_stamp[5:7]) + str(time_stamp[8:10]) + str(time_stamp[11:13]) + str(time_stamp[14:16]) +str(time_stamp[17:19]) + "00"
+
+
+    drawing_map = {"timestamp": time_stamp, "key_id": key_id, "drawing": simple_output[0]}
     print(drawing_map)
-    #with open('drawing.ndjson', 'w') as f:
-    #   ndjson.dump(drawing_map, f)
+    # with open('drawing.ndjson', 'w') as f:
+    # ndjson.dump(drawing_map, f)
     # Writing items to a ndjson file
-    with open('./ndjson_files/drawing.ndjson', 'w') as f:
+    with open('./ndjson_files/new_drawing.ndjson', 'w') as f:
         writer = ndjson.writer(f, ensure_ascii=False)
         writer.writerow(drawing_map)
     # f = drive.CreateFile({"parents": [{"kind": "drive#fileLink", "id": "1gF18VFQBYcSTxtQgCKxBjd46uVcMq3Yv"}]})

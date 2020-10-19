@@ -190,13 +190,13 @@ def strokes_to_lines(strokes):
 def raw_to_lines(raw):
     """Convert raw QuickDraw format to polyline format."""
     result = []
-    N = len(raw)
+    N = len(raw) #number of strokes
     for i in range(N):
         line = []
-        rawline = raw[i]
-        M = len(rawline[0])
+        rawline = raw[i]  # x list, y list, t list
+        M = len(rawline[0]) # number of points in x.
         for j in range(M):
-            line.append([rawline[0][j], rawline[1][j]])
+            line.append([rawline[0][j], rawline[1][j]]) #stroke = [[x0,y0], [x1,y1],... [xM,yM]]
         result.append(line)
     return result
 
