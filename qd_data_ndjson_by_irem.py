@@ -2,7 +2,7 @@
 # Drawings From Quick, Draw!
 It is a python file that uses quickdraw API for finding random drawings.
 ## Output:
-An ndjson file which includes 20(number_of_drawings) simplified drawing datas from aircraft carrier(sketch_name) category.
+An ndjson file which includes 20(number_of_drawings) simplified drawing data with random 60 categories.
 """
 
 from quickdraw import QuickDrawData

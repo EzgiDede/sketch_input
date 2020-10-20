@@ -1,6 +1,4 @@
-WARNING: The code has not finished yet. Only first three steps are working properly at the moment. - 05/10/2020
-
-TODO: Requirements.txt will be added. 
+WARNING: The code has not finished yet. We're at the fifth step at the moment. - 20/10/2020
 
 Step 1: Draw a sketch using sketch_input_interface.py
 That will save the sketch in ndjson format to the ndjson_files directory.
@@ -9,11 +7,21 @@ Step 2: (Optional) If you want to see the simplified version of the sketch in th
 That will save the sketch in the png_sketches directory as a png image.
 
 Step 3: To give the sketch as the input to the model, we need to convert it to an npz file. Run to_npz
-Your input will be saved in npz_files directory.
+Your input will be saved in npz_files directory. (util_npz is a file required for this one)
 
 Step 4: Give your npz file to the model and extract the embedding.npz file.
 --> You can use these as input both for Sketch_RNN and Sketch-transformer models. 
 
-Step 5: Give embeddings to the euclidian.py to extract distance knowledge
+Step 5: Give embeddings to the euclidian.py to extract distance knowledge as a dictionary.
 
 Step 6: visualize_latent_space will visualize the selected cases.
+
+
+--------------------------------
+
+qd_data_ndjson_by_irem can be used to create random simplified qd ndjson files for sub-sampling.
+tSNE is not written by us. We're trying to make it work for visualization purposes.
+npz_to_text.py serves as an input file creator for tSNE at the moment.
+
+npz_to_png will be the shortcut visualization of npz_format images.
+

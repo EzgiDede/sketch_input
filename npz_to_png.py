@@ -1,4 +1,7 @@
 
+# THIS ONE DOES NOT WORK PROPERLY AT THE MOMENT!
+
+
 import numpy as np
 import json as json
 import time
@@ -10,8 +13,8 @@ import numpy as np
 from scipy.spatial import distance
 
 
-filename = "./embeddings_dir/embeddings_flower.npz"
-#filename = "./npz_files/flower_trial_new.npz"
+#filename = "./embeddings_dir/embeddings.npz"
+#filename = "./npz_files/embeddings.npz"
 
 embeddings = np.load(filename, allow_pickle=True, encoding="latin1")
 # input = embeddings["sketches"]
