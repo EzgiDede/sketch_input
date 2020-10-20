@@ -16,7 +16,6 @@ file_path = "./googleqd_categories"
 def open_and_read(file_path):
     # file path is the path of the file as a string.
     object_list = []
-    my_stroke_list = []
     with open(file_path) as f:
         for line in f:
             if line != "\n":
@@ -39,19 +38,11 @@ for category in qd_categories_subsample:
     qd = QuickDrawData()
     doodle = qd.get_drawing(sketch_name)
     drawing_list = []
-
-
-# TO DO: We need to add key_id info as well to our ndjson files!
-# TO DO -2 : Make sure that the drawings are recognized = True.
-
     with open("./ndjson_files/" + sketch_name + "_simplified_qd.ndjson", 'w') as f:
         writer = ndjson.writer(f, ensure_ascii=False)
         for i in range(number_of_drawings):
-            while not doodle.recognized:
-                doodle = qd.get_drawing(sketch_name)
-            while doodle in drawing_list:
+            while doodle.recognized is False or doodle in drawing_list:
                 doodle = qd.get_drawing(sketch_name)
             drawing_list.append(doodle)
-            drawing_map = {"word": sketch_name, "drawing": doodle.image_data}
+            drawing_map = {"word": sketch_name, "key_id": doodle.key_id, "drawing": doodle.image_data}
             writer.writerow(drawing_map)
-
