@@ -9,15 +9,15 @@ At the end, it finds the embeddings closest to each other and embeddings most di
 
 """
 
-
 import numpy as np
 from scipy.spatial import distance
+from sklearn.manifold import TSNE
 import os
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 directory = "./embeddings_dir/"
-
-#file_name = "./embeddings_dir/embeddings.npz"
 
 all_embeddings = []     # a list of tuples (key_id , embedding_vector, class_name)
 latent_space = dict()   # a dictionary. Keys are
@@ -73,8 +73,5 @@ def find_min_max_values():
     print(min, min_id_value, min_key)
 
     print(max, max_id_value, max_key)
-
-
-
 
 
