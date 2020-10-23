@@ -1,5 +1,5 @@
 
-# This python file creates the text files for the input of tSNE.py
+# This python file creates numpy text files.
 
 
 import numpy as np
@@ -12,12 +12,12 @@ directory = "./embeddings_dir/"
 
 all_embeddings = []
 all_labels = []
-f = open('text_embeddings_file.txt', 'w')
-g = open('text_labels_file.txt', 'w')
+f = open('some.txt', 'w')
+g = open('some_other.txt', 'w')
 f.close()
 g.close()
-f = open('text_embeddings_file.txt', 'a')
-g = open('text_labels_file.txt', 'a')
+f = open('some.txt', 'a')
+g = open('some_other.txt', 'a')
 
 for filename in os.listdir(directory):
     if filename.endswith(".npz"):
@@ -27,13 +27,3 @@ for filename in os.listdir(directory):
         key_id = int(embeddings["key_id"])
         np.savetxt(f, embedding)
         g.write('%d' % key_id +"\n")
-"""
-        all_embeddings.append(embedding)
-        all_labels.append(key_id)
-
-f = open('text_embeddings_file.txt', 'w')
-f.write(str(all_embeddings))
-
-f = open('text_labels_file.txt', 'w')
-f.write(str(all_labels))
-"""

@@ -22,15 +22,18 @@ directory = "./embeddings_dir/"
 all_embeddings = []     # a list of tuples (key_id , embedding_vector, class_name)
 latent_space = dict()   # a dictionary. Keys are
 
+
 for filename in os.listdir(directory):
     if filename.endswith(".npz"):
         file_name = filename
         embeddings = np.load(directory + file_name, allow_pickle=True, encoding="latin1")
-        # The outputted embedding of sketch-former will include the embedding of the sketch as well as the key_id.
-        key_id = int(embeddings["key_id"])
-        embedding = embeddings["embeddings"]
-        class_name = file_name.split("_")[1].split(".")[0]
-        all_embeddings.append((key_id, embedding, class_name))
+        for embedding in embeddings:
+            embed_vector = embedding[0]
+            key_id = embedding[1]
+            class_name_raw = embedding[2]
+            class_name = class_name_raw.split(str(key_id))[0]
+            # The outputted embedding of sketch-former will include the embedding of the sketch as well as the key_id.
+            all_embeddings.append((key_id, embed_vector, class_name))
 
 for i in range(len(all_embeddings)):
     embedding_one = all_embeddings[i][1]
@@ -46,6 +49,7 @@ for i in range(len(all_embeddings)):
         current_value = latent_space[current_key]
         current_value.append([key_id_two, euc_distance, (class_name_one, class_name_two)])
         latent_space[current_key] = current_value
+
 
 print(latent_space)
 

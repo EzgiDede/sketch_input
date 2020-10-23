@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.manifold import TSNE
 import os
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 
 
 directory = "./embeddings_dir/"
@@ -14,7 +15,7 @@ class_list = []
 latent_dictionary = dict()
 
 for filename in os.listdir(directory):
-    if filename.endswith(".npz"):
+    if filename.endswith("embeddings_new.npz"):
         file_name = filename
         embeddings = np.load(directory + file_name, allow_pickle=True, encoding="latin1")
         for embedding in embeddings["embeddings"]:
@@ -31,6 +32,7 @@ latent_space = latent_space[1:, :]
 # Now the latent space variable has NxD data in it. N: number of sketches. D: dimensions. D=128 in this case
 latent_space_tsne = TSNE(n_components=2).fit_transform(latent_space)
 
+
 for i in range(len(class_list)):
     label = class_list[i]
     x_float = (latent_space_tsne[i, :])[0]
@@ -45,24 +47,39 @@ for i in range(len(class_list)):
 
 class_keys = latent_dictionary.keys()
 
-legend_list = ["trial_ezgi"]
-scatter_input = (plt.scatter(np.zeros((1, 2)), np.zeros((1, 2))),)
+legend_list = list()
+scatter_input = tuple()   # (plt.scatter(np.zeros((1, 2)), np.zeros((1, 2))),)
+recur = 0
+
 for categ_names in class_keys:
-    x_y_list = latent_dictionary[categ_names]
-    x_array = np.array(x_y_list[0])
-    y_array = np.array(x_y_list[1])
-    legend_list.append(categ_names)
-    scatter_input += (plt.scatter(x_array, y_array),)
+    recur += 1
+    if recur < 11:
+        continue
+    elif recur < 21:
+        x_y_list = latent_dictionary[categ_names]
+        x_array = np.array(x_y_list[0])
+        y_array = np.array(x_y_list[1])
+        legend_list.append(categ_names)
+        scatter_input += (plt.scatter(x_array, y_array),)
 
 legend_tuple = tuple(legend_list)
 
+fontP = FontProperties()
+fontP.set_size('x-small')
 plt.legend(scatter_input,
            legend_tuple,
            scatterpoints=1,
-           loc='lower left',
-           ncol=3,
-           fontsize=8)
+           bbox_to_anchor=(1.05, 1),
+           loc='upper left',
+           prop=fontP,
+           ncol=2)
+
+
+plt.tight_layout()
 
 plt.show()
+
+
+
 
 
