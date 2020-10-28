@@ -57,7 +57,7 @@ for i in range(len(class_keys)):
     the_dict[class_keys[i]] = [the_x, the_y]
 
 
-def find(different_object, the_object, closer):
+def find(different_object, the_object, closer, K):
     # closer can be True or False. If True, it means closest. If False, it means farthest.
     the_point = the_dict.get(the_object)
     distance = []
@@ -68,47 +68,53 @@ def find(different_object, the_object, closer):
         dist = math.dist(the_point, xy)
         distance.append(dist)
 
-    if closer:
-        the_distance = min(distance)
-    elif not closer:
-        the_distance = max(distance)
+    for M in range(K):
+        if closer:
+            the_distance = min(distance)
+        elif not closer:
+            the_distance = max(distance)
 
-    for i in range(len(distance)):
-        if distance[i] == the_distance:
-            index = i
-            break
+        for i in range(len(distance)):
+            if distance[i] == the_distance:
+                index = i
+                break
 
-    coordinate = [coordinates[0][index], coordinates[1][index]]
-    for key in id_vector:
-        if id_vector.get(key) == coordinate:
-            the_id = key
-            break
+        coordinate = [coordinates[0][index], coordinates[1][index]]
+        for key in id_vector:
+            if id_vector.get(key) == coordinate:
+                the_id = key
+                break
 
-    print("--------ID--------")
-    print(the_id)
+        print("--------ID--------")
+        print(the_id)
 
-    qd = QuickDrawData()
-    doodle = qd.get_drawing(different_object)
-    while not doodle.key_id == the_id:
+        qd = QuickDrawData()
         doodle = qd.get_drawing(different_object)
-        found = True
-    if found:
-        print("--------IMAGE--------")
-        print(doodle.image_data)
+        while not doodle.key_id == the_id:
+            doodle = qd.get_drawing(different_object)
+            found = True
+        if found:
+            print("--------IMAGE--------")
+            print(doodle.image_data)
 
-        DEFAULT_SIZE_WHITE_CHANNEL = (1000, 1000, 1)
-        canvas = np.ones(DEFAULT_SIZE_WHITE_CHANNEL, dtype="uint8") * 255
-        cv2.namedWindow('Window')
-        my_stroke_list = doodle.image_data
-        for N in my_stroke_list:
-            x_list = N[0]
-            y_list = N[1]
-            for point in range((len(x_list) - 1)):
-                cv2.line(canvas, (x_list[point], y_list[point]), (x_list[point + 1], y_list[point + 1]), (0, 0, 0), 2)
-        cv2.imwrite("drawing_imagified.png", canvas)
-    else:
-        print("Image cannot be found.")
+            DEFAULT_SIZE_WHITE_CHANNEL = (1000, 1000, 1)
+            canvas = np.ones(DEFAULT_SIZE_WHITE_CHANNEL, dtype="uint8") * 255
+            cv2.namedWindow('Window')
+            my_stroke_list = doodle.image_data
+            for N in my_stroke_list:
+                x_list = N[0]
+                y_list = N[1]
+                for point in range((len(x_list) - 1)):
+                    cv2.line(canvas, (x_list[point], y_list[point]), (x_list[point + 1], y_list[point + 1]), (0, 0, 0), 2)
+            cv2.imwrite("./png_sketches/" + different_object + "_" + the_object + "_" + str(closer) + "_" + str(M) + ".png", canvas)
+
+            distance.pop(index)
+            coordinates[0].pop(index)
+            coordinates[1].pop(index)
+
+        else:
+            print("Image cannot be found.")
 
 
-# penguin most like a bee
-find("penguin", "bee", True)
+# 5 pizza most like the circle
+find("pizza", "circle", True, 5)
