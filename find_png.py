@@ -2,9 +2,9 @@ import numpy as np
 from sklearn.manifold import TSNE
 import os
 import statistics
-import math
 from quickdraw import QuickDrawData
 import cv2 as cv2
+from scipy.spatial import distance as dstnc
 
 directory = "./embeddings_dir/"
 
@@ -65,7 +65,7 @@ def find(different_object, the_object, closer, K):
 
     for i in range(len(coordinates[0])):
         xy = [coordinates[0][i], coordinates[1][i]]
-        dist = math.dist(the_point, xy)
+        dist = dstnc.euclidean(the_point, xy)
         distance.append(dist)
 
     for M in range(K):
