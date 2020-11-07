@@ -1,3 +1,11 @@
+"""
+This file operates on the embeddings and latent space. And finds the closest instances.
+Returns a png of the sketch with the requested property.
+For example: "Find me the bottle that resembles a paintbrush most."
+It works only with the Quick draw data though. You need an embedding.npz as an input.
+"""
+
+
 import numpy as np
 from sklearn.manifold import TSNE
 import os
@@ -116,5 +124,5 @@ def find(different_object, the_object, closer, K):
             print("Image cannot be found.")
 
 
-# 5 pizza most like the circle
-find("pizza", "circle", True, 5)
+# 5 radio the resembles most a rainbow
+find("eye", "finger", True, 5)

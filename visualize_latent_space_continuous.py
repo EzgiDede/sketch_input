@@ -52,15 +52,15 @@ scatter_input = tuple()   # (plt.scatter(np.zeros((1, 2)), np.zeros((1, 2))),)
 recur = 0
 
 for categ_names in class_keys:
-    recur += 1
-    if recur < 11:
-        continue
-    elif recur < 21:
-        x_y_list = latent_dictionary[categ_names]
-        x_array = np.array(x_y_list[0])
-        y_array = np.array(x_y_list[1])
-        legend_list.append(categ_names)
-        scatter_input += (plt.scatter(x_array, y_array),)
+    #recur += 1
+    #if recur < 11:
+        #continue
+    #elif recur < 21:
+    x_y_list = latent_dictionary[categ_names]
+    x_array = np.array(x_y_list[0])
+    y_array = np.array(x_y_list[1])
+    legend_list.append(categ_names)
+    scatter_input += (plt.scatter(x_array, y_array),)
 
 legend_tuple = tuple(legend_list)
 
