@@ -62,6 +62,8 @@ for i in range(len(class_keys)):
     the_dict[class_keys[i]] = [the_x, the_y]
 
 
+# 5 pizza most like the circle
+# find("pizza", "circle", True, 5)
 def find(different_object, the_object, closer, K):
     # closer can be True or False. If True, it means closest. If False, it means farthest.
     the_point = the_dict.get(the_object)
@@ -104,8 +106,11 @@ def find(different_object, the_object, closer, K):
                 x_list = N[0]
                 y_list = N[1]
                 for point in range((len(x_list) - 1)):
-                    cv2.line(canvas, (x_list[point], y_list[point]), (x_list[point + 1], y_list[point + 1]), (0, 0, 0), 2)
-            cv2.imwrite("./png_sketches/" + different_object + "_" + the_object + "_" + str(closer) + "_" + str(M) + ".png", canvas)
+                    cv2.line(canvas, (x_list[point], y_list[point]), (x_list[point + 1], y_list[point + 1]), (0, 0, 0),
+                             2)
+            cv2.imwrite(
+                "./png_sketches/" + different_object + "_" + the_object + "_" + str(closer) + "_" + str(M) + ".png",
+                canvas)
 
             distance.pop(index)
             coordinates[0].pop(index)
@@ -115,10 +120,18 @@ def find(different_object, the_object, closer, K):
             print("Image cannot be found.")
 
 
-# 5 pizza most like the circle
-# find("pizza", "circle", True, 5)
-with open('googleqd_categories') as f:
-     categories = [line.rstrip() for line in f]
+# with open('googleqd_categories') as f:
+#      categories = [line.rstrip() for line in f]
+
+
+categories = ['arm', 'bandage', 'baseball', 'bathtub', 'bed', 'bee', 'boomerang', 'calendar', 'camera', 'castle',
+              'cell phone', 'cello', 'circle', 'clarinet', 'diamond', 'dog', 'dolphin', 'duck', 'eye', 'finger',
+              'fireplace', 'flashlight', 'flip flops', 'flying saucer', 'hammer', 'headphones', 'hospital',
+              'hot air balloon', 'lighter', 'marker', 'matches', 'mouse', 'moustache', 'owl', 'paint can', 'paintbrush',
+              'passport', 'peas', 'penguin', 'pizza', 'power outlet', 'rabbit', 'radio', 'rainbow', 'remote control',
+              'sailboat', 'skateboard', 'skyscraper', 'sleeping bag', 'snowflake', 'soccer ball', 'star', 'stop sign',
+              'swing set', 'syringe', 't-shirt', 'tooth', 'tree', 'underwear', 'van']
+
 
 def command():
     global listbox1, listbox2, listbox3, entry, button
@@ -134,25 +147,28 @@ def command():
     new_im = PIL.Image.new('RGB', (num * 1000, 1000), (250, 250, 250))
     for i in range(num):
         img = PIL.Image.open("./png_sketches/" + first + "_" + second + "_" + str(var) + "_" + str(i) + ".png")
-        new_im.paste(img, (i*1000, 0))
-    new_im.save("merged_images.png", "PNG")
+        new_im.paste(img, (i * 1000, 0))
     new_im.save(
-        "./merged_images/" + str(num) + "_" + first + "_" + listbox3.get(listbox3.curselection()) + "to" + "_" + second + ".png",
+        "./merged_images/" + str(num) + "_" + first + "_" + listbox3.get(
+            listbox3.curselection()) + "to" + "_" + second + ".png",
         "PNG")
     new_im.show()
+    folder = "./png_sketches/"
+    for file in os.listdir(folder):
+        os.remove(folder + file)
 
 
 
 
 top = tk.Tk()
-label1 = Label(top, text="unusual object")
+label1 = Label(top, text="source object")
 label1.grid(row=0, column=0)
 
 listbox1 = Listbox(top, yscrollcommand=True, exportselection=0)
 listbox1.insert(END, *categories)
 listbox1.grid(row=1, column=0)
 
-label2 = Label(top, text="the object")
+label2 = Label(top, text="target object")
 label2.grid(row=0, column=1)
 
 listbox2 = Listbox(top, yscrollcommand=True, exportselection=0)
@@ -173,7 +189,7 @@ label3.grid(row=2, column=1)
 entry = Entry()
 entry.grid(row=3, column=1)
 
-button = Button(top, text= "Find!", command=command)
+button = Button(top, text="Find!", command=command)
 button.grid(row=4, column=1)
 
 top.mainloop()
