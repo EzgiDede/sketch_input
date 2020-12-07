@@ -8,7 +8,7 @@ class_list = []  # string names of all classes in the data.
 latent_dictionary = dict()  # class_name: np array every row is a different sketch's embedding.
 
 for filename in os.listdir(directory):
-    if filename.endswith("glitch_continuous_embeddings.npz"):
+    if filename.endswith("glitch_full_cont_embeddings.npz"):
         file_name = filename
         embeddings = np.load(directory + filename, allow_pickle=True, encoding="latin1")
         for embedding in embeddings["embeddings"]:
@@ -27,7 +27,7 @@ for filename in os.listdir(directory):
 mean_embeddings = np.zeros((1, 3))
 for categ in latent_dictionary.keys():
     categ_embedd = latent_dictionary[categ]
-    categ_mean = np.mean(categ_embedd, axis=0)
+    categ_mean = np.mean(categ_embedd, axis=0, dtype=np.float32)
     mean_embeddings = np.vstack([mean_embeddings, np.array([categ_mean, 0000000000000000, categ])])
 
 new_file_name = "mean_embeddings_" + file_name

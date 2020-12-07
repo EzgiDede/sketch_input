@@ -7,19 +7,19 @@ import os
 import util_npz as util
 
 np.set_printoptions(precision=8, edgeitems=6, linewidth=200, suppress=True)
-directory = "./ndjson_files"
+directory = "./ndjson_files/"
 
 # WARNING: Class name is taken from the file name of the ndjson file.
 
 # Multiple input option
 for filename in os.listdir(directory):
     if filename.endswith(".ndjson"):
-        file_name = filename.split("_")
+        file_name = filename.split(".")
         file_name = file_name[0]
-        raw_file = open("./ndjson_files/" + filename, 'r')
+        raw_file = open(directory + filename, 'r')
         raw_lines = raw_file.readlines()
         num_drawings = len(raw_lines)
-        print("Number of " + file_name + " that'll be converted to npz:" + str(num_drawings))
+        # print("Number of " + file_name + " that'll be converted to npz:" + str(num_drawings))
 
         for i in range(num_drawings):
             all_strokes = []

@@ -1,3 +1,8 @@
+# This code is to explore the distances between classes in the latent space.
+# Written by İrem Karaca.
+
+
+
 import numpy as np
 from sklearn.manifold import TSNE
 import os
@@ -109,7 +114,7 @@ def find(different_object, the_object, closer, K):
                     cv2.line(canvas, (x_list[point], y_list[point]), (x_list[point + 1], y_list[point + 1]), (0, 0, 0),
                              2)
             cv2.imwrite(
-                "./png_sketches/" + different_object + "_" + the_object + "_" + str(closer) + "_" + str(M) + ".png",
+                "./png_sketches/latent_png/" + different_object + "_" + the_object + "_" + str(closer) + "_" + str(M) + ".png",
                 canvas)
 
             distance.pop(index)
@@ -146,14 +151,14 @@ def command():
 
     new_im = PIL.Image.new('RGB', (num * 1000, 1000), (250, 250, 250))
     for i in range(num):
-        img = PIL.Image.open("./png_sketches/" + first + "_" + second + "_" + str(var) + "_" + str(i) + ".png")
+        img = PIL.Image.open("./png_sketches/latent_png/" + first + "_" + second + "_" + str(var) + "_" + str(i) + ".png")
         new_im.paste(img, (i * 1000, 0))
     new_im.save(
         "./merged_images/" + str(num) + "_" + first + "_" + listbox3.get(
             listbox3.curselection()) + "to" + "_" + second + ".png",
         "PNG")
     new_im.show()
-    folder = "./png_sketches/"
+    folder = "./png_sketches/latent_png/"
     for file in os.listdir(folder):
         os.remove(folder + file)
 

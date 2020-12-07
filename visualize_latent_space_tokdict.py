@@ -15,7 +15,7 @@ class_list = []
 latent_dictionary = dict()
 
 for filename in os.listdir(directory):
-    if filename.endswith("tok_dict_embeddings.npz"):
+    if filename.endswith("glitch_full_tok_dict_embeddings.npz"):
         file_name = filename
         tok_dict = np.load(directory + file_name, allow_pickle=True, encoding="latin1")
         for embeddings in tok_dict["embeddings"]:
@@ -50,6 +50,8 @@ class_keys = latent_dictionary.keys()
 legend_list = list()
 scatter_input = tuple()   # (plt.scatter(np.zeros((1, 2)), np.zeros((1, 2))),)
 recur = 0
+
+# hard_categs = ["drug", "hole", "board", "insect", "molecules", "seed", "stone", "valley", "snowboard", "creditcard"]
 
 for categ_names in class_keys:
     #recur += 1

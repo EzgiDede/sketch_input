@@ -26,7 +26,7 @@ def open_and_read(file_path):
 
 
 qd_categories = open_and_read(file_path)
-number_of_categories_to_subsample = 60
+number_of_categories_to_subsample = 57
 
 qd_categories_subsample = random.sample(qd_categories, number_of_categories_to_subsample)
 print("The selected categories are:")
@@ -34,7 +34,7 @@ print(qd_categories_subsample)
 
 for category in qd_categories_subsample:
     sketch_name = category
-    number_of_drawings = 20
+    number_of_drawings = 21
     qd = QuickDrawData()
     doodle = qd.get_drawing(sketch_name)
     drawing_list = []
@@ -42,6 +42,7 @@ for category in qd_categories_subsample:
         writer = ndjson.writer(f, ensure_ascii=False)
         for i in range(number_of_drawings):
             while doodle.recognized is False or doodle in drawing_list:
+            # while doodle in drawing_list:
                 doodle = qd.get_drawing(sketch_name)
             drawing_list.append(doodle)
             drawing_map = {"word": sketch_name, "key_id": doodle.key_id, "drawing": doodle.image_data}

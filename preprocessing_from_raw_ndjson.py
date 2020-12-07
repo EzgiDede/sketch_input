@@ -180,7 +180,7 @@ def process_raw_ndjson_from_glitch(directory):
                 coord_sketch = [x for x in coord_sketch if x != []]   # There shouldn't be any empty stroke.
                 if coord_sketch == []:
                     continue
-                sketch["drawing"] = simplification(coord_sketch)
+                sketch["drawing"] = simplification(coord_sketch)[0]
                 simplified_glitch.append(sketch)
                 # For every sketch, we will create a dictionary and those will be stored in the simplified_glitch list.
                 # The participant source is lost now. We should group them according to the "word" value, i.e. class.
@@ -208,8 +208,9 @@ def sort_simplified_input_according_to_classes(simplified_glitch):
             file_name = previous_class.split()[0]
             # Writing items to a ndjson file
             with open('./ndjson_files/glitch_ndjson/' + file_name + '.ndjson', 'w') as f:
-                writer = ndjson.writer(f, ensure_ascii=False)
-                writer.writerow(categ_list)
+                for drawing in categ_list:
+                    writer = ndjson.writer(f, ensure_ascii=False)
+                    writer.writerow(drawing)
             # create a new list for the upcoming category.
             f.close()
             categ_list = []

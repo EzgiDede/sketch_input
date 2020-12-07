@@ -6,14 +6,21 @@ from quickdraw import QuickDrawData
 import cv2 as cv2
 from scipy.spatial import distance as dstnc
 import PIL.Image
-import tkinter as tk
-from tkinter import *
+
 
 embedding_file_name_endswith = "embeddings_new.npz"
 number_of_categories = 345
 reference_dict = dict()
 centroids = dict()
 matrix_info = []  # 345x345 matrix list [row_category_name, column_category_name, key_id]
+
+categories_trial = ['arm', 'bandage', 'baseball', 'bathtub', 'bed', 'bee', 'boomerang', 'calendar', 'camera', 'castle',
+              'cell phone', 'cello', 'circle', 'clarinet', 'diamond', 'dog', 'dolphin', 'duck', 'eye', 'finger',
+              'fireplace', 'flashlight', 'flip flops', 'flying saucer', 'hammer', 'headphones', 'hospital',
+              'hot air balloon', 'lighter', 'marker', 'matches', 'mouse', 'moustache', 'owl', 'paint can', 'paintbrush',
+              'passport', 'peas', 'penguin', 'pizza', 'power outlet', 'rabbit', 'radio', 'rainbow', 'remote control',
+              'sailboat', 'skateboard', 'skyscraper', 'sleeping bag', 'snowflake', 'soccer ball', 'star', 'stop sign',
+              'swing set', 'syringe', 't-shirt', 'tooth', 'tree', 'underwear', 'van']
 
 
 def read_embedding_file():
@@ -43,9 +50,10 @@ def read_embedding_file():
 
 def distance_calculation():
 
-    with open('googleqd_categories') as f:
-        categories = [line.rstrip() for line in f]
+    #with open('googleqd_categories') as f:
+        #categories = [line.rstrip() for line in f]
 
+    categories = categories_trial      # THIS WILL BE DELETED
     for categ_x in categories:
         row_name = categ_x
         for categ_y in categories:
@@ -93,7 +101,6 @@ def visualize_the_matrix(number_of_categories):
                 canvas)
 
     row_index = -1
-    put_label = True
 
     for source_categ in reference_dict.keys():
         row_index += 1
@@ -104,11 +111,6 @@ def visualize_the_matrix(number_of_categories):
             img = PIL.Image.open(
                 "./png_sketches/latent_png/" + "source_" + source_categ + "_" + "target_" + target_categ + "_" + ".png")
             new_im.paste(img, (column_index * 1000 +100, row_index * 1000 +100))
-            if column_index == number_of_categories-1:
-                put_label = False
-            if put_label:   # column_labels
-                new_im.text((column_index * 1000 +100, 0), target_categ)
-        new_im.text((0, row_index * 1000 +100), source_categ)
 
     new_im.save("./merged_images/" + "matrix" + ".png", "PNG")
     new_im.show()
@@ -128,3 +130,6 @@ categories = ['arm', 'bandage', 'baseball', 'bathtub', 'bed', 'bee', 'boomerang'
 
 """
 
+read_embedding_file()
+distance_calculation()
+visualize_the_matrix(len(categories_trial))
