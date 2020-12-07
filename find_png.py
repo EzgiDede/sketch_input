@@ -125,4 +125,4 @@ def find(different_object, the_object, closer, K):
 
 
 # 5 radio the resembles most a rainbow
-find("eye", "finger", True, 5)
+find("radio", "rainbow", True, 5)
