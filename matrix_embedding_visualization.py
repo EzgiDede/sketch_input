@@ -5,7 +5,7 @@ import os
 from quickdraw import QuickDrawData
 import cv2 as cv2
 from scipy.spatial import distance as dstnc
-import PIL.Image
+import xlsxwriter
 
 
 embedding_file_name_endswith = "embeddings_new.npz"
@@ -24,11 +24,13 @@ categories_trial = ['arm', 'bandage', 'baseball', 'bathtub', 'bed', 'bee', 'boom
 
 
 def read_embedding_file():
+    global reference_dict
+
     directory = "./embeddings_dir/"
     for filename in os.listdir(directory):
         if filename.endswith(embedding_file_name_endswith):
             file_name = filename
-            embeddings = np.load(directory + file_name, allow_pickle=True, encoding="latin1")
+            embeddings = np.load(directory + file_name, allow_pickle=True, encoding="latin1")   # can be optimized with
             for embedding in embeddings["embeddings"]:
                 embed_vector = embedding[0]
                 key_id = embedding[1]
@@ -43,7 +45,7 @@ def read_embedding_file():
                     reference_dict[class_name] = [[key_id], [embed_vector]]
 
     for key in reference_dict.keys():
-        category_wise_embeddings = np.array(reference_dict[key][1])
+        category_wise_embeddings = reference_dict[key][1]
         category_centroid = np.average(category_wise_embeddings, axis=0)
         centroids[key] = category_centroid
 
@@ -60,7 +62,7 @@ def distance_calculation():
             column_name = categ_y
             embedding_list = reference_dict[categ_x][1]
             current_centroid = centroids[categ_y]
-            minimum_distance = 0
+            minimum_distance = 9223372036854775807
             minimum_idx = 0
             index = -1
             for vector in embedding_list:
@@ -86,7 +88,7 @@ def visualize_the_matrix(number_of_categories):
             doodle = qd.get_drawing(row_source)
             found = True
         if found:
-            DEFAULT_SIZE_WHITE_CHANNEL = (1000, 1000, 1)
+            DEFAULT_SIZE_WHITE_CHANNEL = (300, 300, 1)
             canvas = np.ones(DEFAULT_SIZE_WHITE_CHANNEL, dtype="uint8") * 255
             cv2.namedWindow('Window')
             my_stroke_list = doodle.image_data
@@ -100,23 +102,48 @@ def visualize_the_matrix(number_of_categories):
                 "./png_sketches/latent_png/" + "source_" + row_source + "_" + "target_" + column_target + "_" + ".png",
                 canvas)
 
+
+    excel = xlsxwriter.Workbook("./merged_images/" + "matrix" + ".xlsx")
+    worksheet = excel.add_worksheet()
+    worksheet.set_default_row(300)
+    worksheet.set_column('A:ZZ', 50)
+
     row_index = -1
+    column_empty = True
+
+    for source_categ in categories_trial:
+        row_index += 1
+        column_index = -1
+        for target_categ in categories_trial:
+            column_index += 1
+
+            pic = "./png_sketches/latent_png/" + "source_" + source_categ + "_" + "target_" + target_categ + "_" + ".png"
+            worksheet.insert_image(row_index +1, column_index+1, pic)
+            if column_empty:
+                worksheet.write(0, column_index+1, target_categ)
+        column_empty = False
+        worksheet.write(row_index+1, 0, source_categ)
+
+    excel.close()
+
+""" Old version of the matrix.
 
     for source_categ in reference_dict.keys():
         row_index += 1
         column_index = -1
         for target_categ in reference_dict.keys():
             column_index += 1
-            new_im = PIL.Image.new('RGB', (number_of_categories * 1000, number_of_categories * 1000), (250, 250, 250))
+            new_im = PIL.Image.new('RGB', (number_of_categories * 300, number_of_categories * 300), (250, 250, 250))
             img = PIL.Image.open(
                 "./png_sketches/latent_png/" + "source_" + source_categ + "_" + "target_" + target_categ + "_" + ".png")
-            new_im.paste(img, (column_index * 1000 +100, row_index * 1000 +100))
+            new_im.paste(img, (column_index * 300 +100, row_index * 300 +100))
 
     new_im.save("./merged_images/" + "matrix" + ".png", "PNG")
     new_im.show()
     folder = "./png_sketches/latent_png/"
     for file in os.listdir(folder):
         os.remove(folder + file)
+"""
 
 
 """
