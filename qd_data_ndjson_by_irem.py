@@ -32,9 +32,10 @@ qd_categories_subsample = random.sample(qd_categories, number_of_categories_to_s
 print("The selected categories are:")
 print(qd_categories_subsample)
 
+
 for category in qd_categories_subsample:
     sketch_name = category
-    number_of_drawings = 21
+    number_of_drawings = 30
     qd = QuickDrawData()
     doodle = qd.get_drawing(sketch_name)
     drawing_list = []

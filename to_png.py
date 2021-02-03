@@ -43,16 +43,16 @@ def visualize_strokes(object_input, file_name):
 
         ## Convert the output to png.
         cv2.imshow('Window', canvas)
-        cv2.imwrite("./png_sketches/glitch_png/" + file_name + str(key_id) + ".png", canvas)
+        cv2.imwrite("./png_sketches/" + file_name + str(key_id) + ".png", canvas)
         canvas = np.ones(DEFAULT_SIZE_WHITE_CHANNEL, dtype="uint8") * 255
 
 
 def iterate_pngs():
-    directory = "ndjson_files/glitch_ndjson/"
+    directory = "ndjson_files/"
     for filename in os.listdir(directory):
-        if filename.endswith(".ndjson"):
+        if filename.endswith("chair_simplified_qd.ndjson"):
             file_name = (filename.split("_"))[0]
-            file_path = ("./ndjson_files/glitch_ndjson/" + filename)
+            file_path = ("./ndjson_files/" + filename)
             visualize_strokes(open_and_read(file_path), file_name)
 
 iterate_pngs()
