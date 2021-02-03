@@ -1,12 +1,15 @@
 """
-This file finds the top-3 drawings that are most similar to the source class centroid.
-Puts them inside of an excel doc.
-Every row has a header, representing the source class name.
-Following 3 sketches are from different classes, resembling the source object in the header.
+03.02.21 Description by Ezgi:
 
-++ Additionally,
-Now the file concatenates the 3 source class sketches that resembles the top-3 similar sketches.
-Confusing, I know.
+This is the final method that we used to see the feature extraction abilities of our model.
+It creates an excel file with category names on column 1.
+At column 2-3-4 we see the most similar sketches to the category at column 1, which doesn't belong to that category.
+For example, column-1 says "tree" column 2 is the sketch that resembles a tree most but it belongs to the class "flower"
+At column 5, we have a sketch belongs to the source category (column 1) that resembles to the sketch at column-2.
+With the same example, at column-5 we have a tree that resembles most to the flower presented in column-2.
+Thus, the column 6, resembles column 3. Column 7, resembles column 4.
+It also creates a tagets.txt file, by taking that as a guide, you can see the origin category of sketches presented in column 2-3-4.
+P.S. I highly recommend to run this on a PC with relatively high computational power.
 """
 
 import numpy as np
@@ -25,7 +28,7 @@ matrix_info = []  # 345x345 matrix list [row_category_name, column_category_name
 def read_embedding_file():
     global reference_dict
 
-    directory = "D:/Koc Uni Things/Sketch_input/sketch_input/embeddings_dir/QD_150_samples_embeddings"
+    directory = "./embeddings_dir/QD_150_samples_embeddings"
     for filename in os.listdir(directory):
         if filename.endswith(embedding_file_name_endswith):
             file_name = filename
@@ -50,7 +53,7 @@ def read_embedding_file():
 
 
 def distance_calculation():
-    with open('D:/Koc Uni Things/Sketch_input/sketch_input/googleqd_categories') as f:
+    with open('./googleqd_categories') as f:
         categories = [line.rstrip() for line in f]
 
     for categ_x in categories:
@@ -157,7 +160,7 @@ def distance_calculation():
         # matrix_info.append([row_name, column_name, chosen_key_id])
         matrix_info.append([row_name, minimum_categ_name, chosen_key_ids, similar_source_sketch_ids])
 
-        content_file = "D:/Koc Uni Things/Sketch_input/sketch_input/targets.txt"
+        content_file = "./targets.txt"
         f = open(content_file, "a")
         f.write(str([row_name, minimum_categ_name, chosen_key_ids, similar_source_sketch_ids]) + "\n")
         f.close()
@@ -190,40 +193,40 @@ def visualize_the_matrix(number_of_categories):
                                  (0, 0, 0),
                                  2)
                 cv2.imwrite(
-                    "D:/Koc Uni Things/Sketch_input/sketch_input/png_sketches/trial_pngs" + "source_" + row_source + "_" + str(
+                    "./png_sketches/trial_pngs" + "source_" + row_source + "_" + str(
                         i) + ".png",
                     canvas)
 
-            for i in range(3):
-                column_target = (obj[1])[i]
-                the_id = (obj[2])[i]
-                most_similar_source_id = (obj[3])[i]
+        for i in range(3):
+            column_target = (obj[1])[i]
+            the_id = (obj[2])[i]
+            most_similar_source_id = (obj[3])[i]
 
-                # Find the most similar target sketches.
-                qd = QuickDrawData()
+            # Find the most similar target sketches.
+            qd = QuickDrawData()
+            doodle = qd.get_drawing(row_source)
+            while not doodle.key_id == most_similar_source_id:
                 doodle = qd.get_drawing(row_source)
-                while not doodle.key_id == most_similar_source_id:
-                    doodle = qd.get_drawing(row_source)
-                found = True
-                if found:
-                    DEFAULT_SIZE_WHITE_CHANNEL = (300, 300, 1)
-                    canvas = np.ones(DEFAULT_SIZE_WHITE_CHANNEL, dtype="uint8") * 255
-                    cv2.namedWindow('Window')
-                    my_stroke_list = doodle.image_data
-                    for N in my_stroke_list:
-                        x_list = N[0]
-                        y_list = N[1]
-                        for point in range((len(x_list) - 1)):
-                            cv2.line(canvas, (x_list[point], y_list[point]), (x_list[point + 1], y_list[point + 1]),
-                                     (0, 0, 0),
-                                     2)
-                    cv2.imwrite(
-                        "D:/Koc Uni Things/Sketch_input/sketch_input/png_sketches/trial_pngs" + "source_" + row_source + "_" + str(
-                            i) + "_sourceimage.png",
-                        canvas)
+            found = True
+            if found:
+                DEFAULT_SIZE_WHITE_CHANNEL = (300, 300, 1)
+                canvas = np.ones(DEFAULT_SIZE_WHITE_CHANNEL, dtype="uint8") * 255
+                cv2.namedWindow('Window')
+                my_stroke_list = doodle.image_data
+                for N in my_stroke_list:
+                    x_list = N[0]
+                    y_list = N[1]
+                    for point in range((len(x_list) - 1)):
+                        cv2.line(canvas, (x_list[point], y_list[point]), (x_list[point + 1], y_list[point + 1]),
+                                 (0, 0, 0),
+                                 2)
+                cv2.imwrite(
+                    "./png_sketches/trial_pngs" + "source_" + row_source + "_" + str(
+                        i) + "_sourceimage.png",
+                    canvas)
 
     excel = xlsxwriter.Workbook(
-        "D:/Koc Uni Things/Sketch_input/sketch_input/png_sketches/" + "matrix_six_with_targets" + ".xlsx")
+        "./png_sketches/" + "matrix_six_with_targets" + ".xlsx")
     worksheet = excel.add_worksheet()
     worksheet.set_default_row(300)
     worksheet.set_column('A:ZZ', 50)
@@ -237,14 +240,14 @@ def visualize_the_matrix(number_of_categories):
         for ordered in range(6):
             column_index += 1
             if ordered <3:
-                pic = "D:/Koc Uni Things/Sketch_input/sketch_input/png_sketches/trial_pngs" + "source_" + source_categ + "_" + str(
+                pic = "./png_sketches/trial_pngs" + "source_" + source_categ + "_" + str(
                     ordered) + ".png"
                 worksheet.insert_image(row_index + 1, column_index + 1, pic)
 
                 if column_empty:
                     worksheet.write(0, column_index + 1, ("target_similar" + str(ordered+1)))
             else:
-                pic = "D:/Koc Uni Things/Sketch_input/sketch_input/png_sketches/trial_pngs" + "source_" + source_categ + "_" + str(
+                pic = "./png_sketches/trial_pngs" + "source_" + source_categ + "_" + str(
                     ordered-3) + "_sourceimage.png"
                 worksheet.insert_image(row_index + 1, column_index + 1, pic)
 

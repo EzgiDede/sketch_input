@@ -1,12 +1,15 @@
 """
+03.02.21 Description by Ezgi:
+
+We are NOT using this one anymore, yet we can keep it. - 03.02.21
+
 Calculates the distances between every embedding file existing in the embeddings_dir.
 
 Returns a dictionary named "latent_space"
 key: key_id_one    --> Integer. Key id of the first sketch
-values: a list of lists. An item is: [key_id_two(compared sketch), euc_distance, (class_name_one, class_name_two)])
+values: a list of lists. An item is: [key_id_two(the sketch which we compared with the key_id), euc_distance, (class_name_one, class_name_two)])
 
 At the end, it finds the embeddings closest to each other and embeddings most distant from each other.
-
 """
 
 import numpy as np

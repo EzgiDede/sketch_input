@@ -1,3 +1,15 @@
+"""
+03.02.21 Description by Ezgi:
+
+This file takes a folder containing simplified ndjson files as the input and visualizes them in png format.
+
+iterate_pngs: iterates over the files in a directory to call open_and_read with individual files.
+open_and_read: reads the simplified ndjson file
+visualize_strokes: puts a line between the points in the simplified drawing and saves the drawing as a png file.
+
+"""
+
+
 import cv2
 import ndjson as ndjson
 import numpy as np
@@ -50,7 +62,7 @@ def visualize_strokes(object_input, file_name):
 def iterate_pngs():
     directory = "ndjson_files/"
     for filename in os.listdir(directory):
-        if filename.endswith("chair_simplified_qd.ndjson"):
+        if filename.endswith(".ndjson"):
             file_name = (filename.split("_"))[0]
             file_path = ("./ndjson_files/" + filename)
             visualize_strokes(open_and_read(file_path), file_name)

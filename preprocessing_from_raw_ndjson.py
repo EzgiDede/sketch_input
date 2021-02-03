@@ -1,8 +1,12 @@
 """
- This file is created to preprocess sketch data collected by our team.
- The output will be the same as the Quick Draw simplified ndjson format.
-    For our sketch data collected via Glitch interface.
+03.02.21 Description by Ezgi:
 
+This file is designed specifically for the "glitch data" inside "ndjson_files/glitch_ndjson" folder.
+
+ This file is created to preprocess sketch data collected by our team via Glitch interface.
+ The raw ndjson format was a little bit different in our interface.
+
+ The output will be the same as the Quick Draw simplified ndjson format.
 """
 
 import numpy as np

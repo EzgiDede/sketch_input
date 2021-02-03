@@ -1,8 +1,17 @@
 """
+03.02.21 Description by Ezgi:
+
+This is an early version of png_finder. It doesn't have any interface or option as "distant".
+It concatanes the sketches to the same png file.
+Maybe it will be useful someday.
+
+
 This file operates on the embeddings and latent space. And finds the closest instances.
 Returns a png of the sketch with the requested property.
 For example: "Find me the bottle that resembles a paintbrush most."
 It works only with the Quick draw data though. You need an embedding.npz as an input.
+
+Written by İrem Karaca.
 """
 
 

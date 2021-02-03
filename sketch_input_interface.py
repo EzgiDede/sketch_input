@@ -1,3 +1,19 @@
+"""
+03.02.21 Description by Ezgi:
+
+This python file opens a canvas for the user and saves the simplified drawing as an ndjson file.
+
+Press "ESC" to close the canvas and save the sketch.
+
+interactive_drawing: Opens a canvas to the user to record the drawing in vector format
+simplification: Pre-processes the raw vector drawing to create a simplified ndjson.
+rdp_algorithm has a parameter "epsilon_value" and its default value is fixed to 2.0.
+converter: Assigns a key_id and time stamp derived from it to the drawing and saves it as ndjson file (simplified).
+The name of the new file is set as "ndjson_files/new_drawing.ndjson" at the moment.
+
+"""
+
+
 import cv2
 import ndjson as ndjson
 import numpy as np
@@ -69,6 +85,8 @@ def simplification():
     Step-4: Simplify all strokes using the Ramer–Douglas–Peucker algorithm with an epsilon value of 2.0.
     """
     global image, simple_output
+
+    epsilon_value = 2.0
 
     # First of all we should check if the sketch is longer than 20 points.
     sketch_length = 0
@@ -201,7 +219,7 @@ def simplification():
 
     simplification_xy_output = []
     for strokes in rdp_input:
-        rdp_output = rdp_lib.rdp(strokes, epsilon=2.0)
+        rdp_output = rdp_lib.rdp(strokes, epsilon=epsilon_value)
         simplification_xy_output.append(rdp_output)
 
     simplification_output = []

@@ -1,3 +1,13 @@
+"""
+03.02.21 Description by Ezgi:
+
+This file uses util_npz.py from Google and converts the simplified ndjson files to npz files containing the sketch
+as stroke-3 format.
+
+Currently it iterates over the files in ndjson_files directory.
+
+"""
+
 
 import numpy as np
 import json as json

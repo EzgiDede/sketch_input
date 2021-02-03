@@ -1,3 +1,15 @@
+"""
+03.02.21 Description by Ezgi:
+
+Takes the embedding.npz file and finds the average feature vector for each class in it.
+Lets say we have 10 tree sketch embeddings, it takes the average of them to represent the class "tree".
+Saves them as a new npz file.
+
+We may also call them as the centroids since they are at the center of all sketches belonging to the same category.
+
+"""
+
+
 import numpy as np
 import os
 

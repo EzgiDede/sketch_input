@@ -1,27 +1,80 @@
-WARNING: The code has not finished yet. We're at the fifth step at the moment. - 20/10/2020
+WARNING: The code is not optimized or cleared yet. 03 February 2021
 
-Step 1: Draw a sketch using sketch_input_interface.py
-That will save the sketch in ndjson format to the ndjson_files directory.
+Note that these files are used in harmony with the Sketchformer model of Collomosse et al. & Quick Draw dataset.
 
-Step 2: (Optional) If you want to see the simplified version of the sketch in the png format run to_png.py
+* sketch_input_interface.py:
+sketch_input_interface.py allows you to draw a sketch and saves it as a vector.
+That sketch will be simplified by the pre-processing algorithms of Sketch-RNN (Google's Quick Draw).
+And the simplified sketch will be saved as an ndjson file to the ndjson_files directory.
+
+* qd_data_ndjson_by_irem.py:
+You can use this code to sub-sample Quick Draw dataset with specifying:
+1) the number of categories(classes) or the list of categories(classes) to sub-sample.
+2) the number of sketches to be sampled from each category or class specified at step 1.
+The file outputs randomly sampled Recognized sketches in ndjson-simplified format.
+
+* preprocessing_from_raw_ndjson.py:
+This file is specifically designed to preprocess the data gathered via Glitch interface by our team.
+It doesn't have a use for anyone outside of our research team.
+
+* to_png.py:
+to_png py allows you to visualize the simplified drawing ndjson files in png format.
 That will save the sketch in the png_sketches directory as a png image.
 
-Step 3: To give the sketch as the input to the model, we need to convert it to an npz file. Run to_npz
-Your input will be saved in npz_files directory. (util_npz is a file required for this one)
+* to_npz.py & util_npz.py:
+To give the sketch as the test input to the Model, we need to convert it to an npz file.
+This code iterates over all the files in ndjson_files directory.
+The resulting sketch is in stroke-3 format.
+The output will be saved in npz_files directory.
+This file requires util_npz.py from Google to work.
 
-Step 4: Give your npz file to the model and extract the embedding.npz file.
---> You can use these as input both for Sketch_RNN and Sketch-transformer models. 
+* embeddings_dir:
+This directory contains embeddings extracted with the Sketchformer model in the npz file format.
+To get those embeddings, the output of the to_npz files are given to the model.
 
-Step 5: Give embeddings to the euclidian.py to extract distance knowledge as a dictionary.
+* mean_embedding_extraction:
+Takes the embedding.npz file and finds the average feature vector for each class in it.
+Lets say we have 10 tree sketch embeddings, it takes the average of them to represent the class "tree".
+Saves them as a new npz file.
 
-Step 6: visualize_latent_space will visualize the selected cases.
+* euclidian.py:
+Euclidian.py gets the embedding files in the embeddings_dir as input and compares all of them to each other.
+It finds the most similar and distant embedding vectors in the whole directory.
+It was a useful primal code to test the latent space and feature extraction ability of the model.
+
+* visualize_latent_space_continuous.py & visualize_latent_space_tokdict.py:
+These files use TSNE algorithm to visualize the latent space created by the embeddings file.
+However, the code is not finished yet. It uses only 10 different colors to represent all classes.
+This was another useful primal code to see the latent space class separation in 2D.
+Continuous file works with the embeddings extracted from continuous version of the sketchformer model.
+TokDict file works with the embeddings extracted from Tok_Dict version of the sketchformer model.
+For more details, see the Sketchformer paper of Collomosse, et al.
+
+* png_finder.py & png_find.py:
+png_finder is an interface to explore the latent space and feature extraction abilities of the model.
+User specifies the source class(e.g. tree), target class(e.g. snowflake), a number (e.g. 5) and relationship (similar or distant)
+to find the top 5 tree sketches that resembles a snowflake most or the top 5 tree sketches that are far from being a snowflake.
+Note that it only works with the embeddings provided in embeddings_dir folder.
+png_find.py is the early version of it, doing the same thing without an interface.
+
+* matrix_embedding_visualization.py:
+This is the final method that we used to see the feature extraction abilities of our model.
+It creates an excel file with category names on column 1.
+At column 2-3-4 we see the most similar sketches to the category at column 1, which doesn't belong to that category.
+For example, column-1 says "tree" column 2 is the sketch that resembles a tree most but it belongs to the class "flower"
+At column 5, we have a sketch belongs to the source category (column 1) that resembles to the sketch at column-2.
+With the same example, at column-5 we have a tree that resembles most to the flower presented in column-2.
+Thus, the column 6, resembles column 3. Column 7, resembles column 4.
+It also creates a tagets.txt file, by taking that as a guide, you can see the origin category of sketches presented in column 2-3-4.
+P.S. I highly recommend to run this on a PC with relatively high computational power.
+
+* npz_to_png.py:
+This file is especially useful to visualize the reconstruction output of Sketchformer model.
+It takes an npz file as the input and creates png files for every sketch inside of it.
+
+* googleqd_categories is a text file containing a list of all Quick Draw category names.
 
 
---------------------------------
 
-qd_data_ndjson_by_irem can be used to create random simplified qd ndjson files for sub-sampling.
-tSNE is not written by us. We're trying to make it work for visualization purposes.
-npz_to_text.py serves as an input file creator for tSNE at the moment.
 
-npz_to_png will be the shortcut visualization of npz_format images.
 

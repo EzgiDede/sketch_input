@@ -1,4 +1,14 @@
-# It WORKS!
+"""
+03.02.21 Description by Ezgi:
+
+We are NOT using this one anymore, yet we can keep it. - 03.02.21
+
+It visualizes the distances between embedding vectors in the latent space to see how they are located.
+This file helps visualizing the ability of the feature extraction of the model,
+Yet it's not a good measure since we're using a different model to decrease the dimensionality from 128 to 2
+
+This one was designed for embeddings extracted from continuous input.
+"""
 
 import numpy as np
 from sklearn.manifold import TSNE

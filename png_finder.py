@@ -1,5 +1,31 @@
-# This code is to explore the distances between classes in the latent space.
-# Written by İrem Karaca.
+
+"""
+03.02.21 Description by Ezgi:
+
+ The code has an interface. By specifying the source class and the target class, you explore the embedding file to find:
+ The sketch belonging to the source class category, which resembles the target class category most.
+
+ For example:
+ source class: apple
+ target class: banana
+
+ You find the apples that resembles a banana most.
+
+ You specify the number of sketches to find the top n number of apples that resembles a banana
+
+ You can change the relationship to "distant" if you want to see the opposite:
+ apples that don't resemble a banana at all.
+
+ This is again a primal code to see the feature extraction abilities of the model.
+ This code is to explore the distances between classes in the latent space.
+
+ Note that it only works with the categories exist in the embedding file, that's why the interface should be changed
+ if the categories are different.
+
+ Written by İrem Karaca.
+"""
+
+
 
 
 
